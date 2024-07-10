@@ -3,13 +3,13 @@ import { getFirestore } from "@firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {
-	apiKey: "AIzaSyCtBM7pAMfftdH_yQdjI6LLrON481_ErtM",
-	authDomain: "dental-record-system.firebaseapp.com",
-	projectId: "dental-record-system",
-	storageBucket: "dental-record-system.appspot.com",
-	messagingSenderId: "368775360295",
-	appId: "1:368775360295:web:c145047a35ab0356388302",
-	measurementId: "G-R9N88F4WZR",
+	apiKey: "AIzaSyCs4HaxjCCcZ3pWEh0e78hL1q3ikC3RVnI",
+	authDomain: "dental-record-system-c0695.firebaseapp.com",
+	projectId: "dental-record-system-c0695",
+	storageBucket: "dental-record-system-c0695.appspot.com",
+	messagingSenderId: "446706234689",
+	appId: "1:446706234689:web:bf0ba66243dc8568ee5dc0",
+	measurementId: "G-8PHMT0LBN7",
 };
 
 const app = initializeApp(firebaseConfig);
