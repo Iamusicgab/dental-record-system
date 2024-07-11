@@ -1,18 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import calendarPic from "../assets/calendar.svg";
 import rxPic from "../assets/rx.svg";
 import addPic from "../assets/add.svg";
 import dbPic from "../assets/db.svg";
 // import settingsPic from "../assets/settings.svg";
+import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 
 function Home() {
 	const [doctorFirstname, setDoctorFirstname] = useState("n/a");
 	const [activeAppointmentsToday, setActiveAppointmentsToday] = useState(2);
+	const [isSignedIn, setIsSignedIn] = useState(false);
 	const nav = useNavigate();
 	const navButton = (link: string) => {
 		nav(link);
 	};
+
 	return (
 		<div>
 			<h1 className="text-2xl font-bold">
