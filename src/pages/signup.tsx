@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { User } from "../App";
 import { signUp } from "../components/firebase";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-	const [user, setUser] = useState<User>({
+	const nav = useNavigate();
+	const [user, setUser] = useState({
 		name: "",
 		prcNumber: 0o000,
 		clinicName: "",
@@ -12,16 +13,18 @@ function Login() {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState<any>(null);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const userCred = signUp(
-			user.email,
-			password,
-			user.name,
-			user.clinicName,
-			user.prcNumber
-		);
-		console.log(userCred);
+		try {
+			await signUp(
+				user.email,
+				password,
+				user.name,
+				user.clinicName,
+				user.prcNumber
+			);
+			nav("/");
+		} catch {}
 	};
 	const handleChange = (e: any) => {
 		setUser({ ...user, [e.target.name]: e.target.value });

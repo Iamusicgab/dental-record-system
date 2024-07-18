@@ -3,8 +3,10 @@ import { auth } from "../components/firebase";
 import { login } from "../components/firebase";
 
 import { useContext, useState } from "react";
+import { AuthContext } from "../components/userContext";
 
 function Login() {
+	const currentUser = useContext(AuthContext);
 	const [user, setUser] = useState({
 		email: "",
 		password: "",

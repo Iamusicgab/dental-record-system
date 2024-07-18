@@ -3,8 +3,8 @@ import { AuthContext } from "./userContext";
 
 import { Navigate, Outlet } from "react-router-dom";
 export default function PrivateRoute() {
-	const user = useContext(AuthContext);
-	console.log(user);
+	const currentUser = useContext(AuthContext);
+	console.log(currentUser);
 
-	return user ? <Outlet /> : <Navigate to="/login" />;
+	return currentUser == undefined ? <Navigate to="/login" /> : <Outlet />;
 }

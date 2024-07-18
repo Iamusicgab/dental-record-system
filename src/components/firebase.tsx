@@ -42,7 +42,7 @@ const signUp = async (
 	clinicName: string,
 	prcNumber: number
 ) => {
-	createUserWithEmailAndPassword(auth, email, password)
+	return await createUserWithEmailAndPassword(auth, email, password)
 		.then((userCredential) => {
 			const user = userCredential.user;
 			setDoc(doc(db, "doctors", user.uid), {

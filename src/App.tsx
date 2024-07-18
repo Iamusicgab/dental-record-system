@@ -10,14 +10,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserContext from "./components/userContext";
 import PrivateRoute from "./components/PrivateRoute";
 
-export interface User {
-	name: string;
-	prcNumber: number;
-	clinicName: string;
-	email: string;
-	patients?: any[];
-}
-
 function App() {
 	return (
 		<div className="p-4">

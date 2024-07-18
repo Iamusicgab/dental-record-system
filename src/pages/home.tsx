@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import calendarPic from "../assets/calendar.svg";
 import rxPic from "../assets/rx.svg";
 import addPic from "../assets/add.svg";
 import dbPic from "../assets/db.svg";
 // import settingsPic from "../assets/settings.svg";
-import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
 
 function Home() {
 	const [doctorFirstname, setDoctorFirstname] = useState("n/a");
