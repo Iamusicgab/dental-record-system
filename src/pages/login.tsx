@@ -1,33 +1,28 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../components/firebase";
-import { login } from "../components/firebase";
+import { signIn } from "../components/userContext";
 
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../components/userContext";
 
 function Login() {
 	const currentUser = useContext(AuthContext);
+	const nav = useNavigate();
 	const [user, setUser] = useState({
 		email: "",
 		password: "",
 	});
 	const [error, setError] = useState<any>(null);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		signInWithEmailAndPassword(auth, user.email, user.password)
-			.then((user) => {
-				console.log(user);
-			})
-			.catch((error: Error) => {
-				console.log(error);
-				setError(error);
-			});
+		await signIn(user.email, user.password);
+		nav("/");
 
 		console.log(user);
 	};
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setUser({ ...user, [e.target.name]: e.target.value });
+		console.log(user);
 	};
 	return (
 		<form onSubmit={handleSubmit}>
@@ -46,6 +41,7 @@ function Login() {
 					required
 					type="text"
 					autoComplete="email"
+					name="email"
 					className="grow"
 					placeholder="Email"
 				/>
@@ -67,6 +63,7 @@ function Login() {
 					onChange={handleChange}
 					type="password"
 					placeholder="Password"
+					name="password"
 					autoComplete="current-password"
 					className="grow"
 				/>

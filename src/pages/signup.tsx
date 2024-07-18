@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signUp } from "../components/firebase";
+import { signUp } from "../components/userContext";
 import { useNavigate } from "react-router-dom";
 
 function Login() {

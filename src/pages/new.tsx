@@ -1,5 +1,4 @@
-import { addDoc, collection, Timestamp } from "firebase/firestore";
-import { db } from "../components/firebase";
+import { addNewPatient } from "../components/userContext";
 import { useState } from "react";
 
 function New() {
@@ -7,28 +6,23 @@ function New() {
 		name: "",
 		dob: "",
 		address: "",
-		procedures: [
-			{
-				procedureName: "",
-				date: "",
-			},
-		],
+		procedureName: "",
 	});
 	const [error, setError] = useState("");
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		addDoc(collection(db, "doctors", "docGab", "patients"), {
-			...newPatientData,
-			procedures: [
-				{
-					...newPatientData.procedures[0],
-					date: Timestamp.now(),
-				},
-			],
-		});
+		await addNewPatient(
+			newPatientData.name,
+			newPatientData.dob,
+			newPatientData.address,
+			newPatientData.procedureName
+		);
 		console.log("Submitted");
 		console.log(newPatientData);
+	};
+	const handleChange = (e: any) => {
+		setNewPatientData({ ...newPatientData, [e.target.name]: e.target.value });
 	};
 	return (
 		<form
@@ -41,56 +35,44 @@ function New() {
 			<input
 				required
 				type="text"
+				name="name"
 				placeholder="Patient's Full Name"
 				title="Name"
 				autoCorrect="off"
 				autoCapitalize="words"
 				autoComplete="name"
 				className="input input-bordered input-md w-full"
-				onChange={(e) => {
-					setNewPatientData({ ...newPatientData, name: e.target.value });
-				}}
+				onChange={handleChange}
 			/>
 			<input
 				required
 				type="date"
+				name="dob"
 				placeholder="DD-MM-YYYY"
 				title="Birthday"
 				className="input input-bordered input-md w-full"
-				onChange={(e) => {
-					setNewPatientData({ ...newPatientData, dob: e.target.value });
-				}}
+				onChange={handleChange}
 			/>
 			<input
 				required
 				type="text"
+				name="address"
 				placeholder="Address"
 				title="Address"
 				autoCorrect="off"
 				autoCapitalize="words"
 				autoComplete="address-level1"
 				className="input input-bordered input-md w-full"
-				onChange={(e) => {
-					setNewPatientData({ ...newPatientData, address: e.target.value });
-				}}
+				onChange={handleChange}
 			/>
 			<input
 				required
 				type="text"
 				placeholder="Procedure"
+				name="procedureName"
 				title="Procedure"
 				className="input input-bordered input-md w-full"
-				onChange={(e) => {
-					setNewPatientData({
-						...newPatientData,
-						procedures: [
-							{
-								...newPatientData.procedures[0],
-								procedureName: e.target.value,
-							},
-						],
-					});
-				}}
+				onChange={handleChange}
 			/>
 			<input
 				type="submit"

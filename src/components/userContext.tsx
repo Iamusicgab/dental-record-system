@@ -1,15 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth, db } from "./firebase";
+import {
+	addDoc,
+	setDoc,
+	collection,
+	doc,
+	Timestamp,
+} from "@firebase/firestore";
+import {
+	signInWithEmailAndPassword,
+	createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 export const AuthContext = createContext<any>(null);
+
+const signIn = async (email: string, password: string) => {
+	return await signInWithEmailAndPassword(auth, email, password);
+};
+
+const signUp = async (
+	email: string,
+	password: string,
+	name: string,
+	clinicName: string,
+	prcNumber: number
+) => {
+	return await createUserWithEmailAndPassword(auth, email, password).then(
+		(userCredential) => {
+			const user = userCredential.user;
+			setDoc(doc(db, "doctors", user.uid), {
+				email,
+				name,
+				clinicName,
+				prcNumber,
+			});
+		}
+	);
+};
+
+const addNewPatient = async (
+	name: string,
+	age: string,
+	address: string,
+	procedures: any,
+	contactNumber?: number
+) => {
+	const userId = auth.currentUser?.uid || "";
+	try {
+		const add = await addDoc(collection(db, "doctors", userId, "patients"), {
+			name,
+			age,
+			address,
+		});
+
+		await addDoc(
+			collection(db, "doctors", userId, "patients", add.id, "procedures"),
+			{
+				procedureName: procedures,
+				date: Timestamp.now(),
+			}
+		);
+		return add;
+	} catch {
+		console.log("error");
+	}
+};
 
 function UserContext({ children }: { children: React.ReactNode }) {
 	const [currentUser, setCurrentUser] = useState<any>();
 	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		console.log("render");
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setLoading(false);
 			if (user) {
@@ -32,3 +94,4 @@ function UserContext({ children }: { children: React.ReactNode }) {
 }
 
 export default UserContext;
+export { signIn, signUp, addNewPatient };

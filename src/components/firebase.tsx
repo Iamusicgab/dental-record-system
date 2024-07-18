@@ -1,18 +1,6 @@
 import { initializeApp } from "@firebase/app";
-import {
-	addDoc,
-	setDoc,
-	collection,
-	doc,
-	getFirestore,
-	connectFirestoreEmulator,
-} from "@firebase/firestore";
-import {
-	getAuth,
-	connectAuthEmulator,
-	signInWithEmailAndPassword,
-	createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 
 const firebaseConfig = {
 	apiKey: "AIzaSyCs4HaxjCCcZ3pWEh0e78hL1q3ikC3RVnI",
@@ -31,32 +19,4 @@ const auth = getAuth(app);
 connectFirestoreEmulator(db, "localhost", 8080);
 connectAuthEmulator(auth, "http://localhost:9099");
 
-const signIn = async (email: string, password: string) => {
-	return await signInWithEmailAndPassword(auth, email, password);
-};
-
-const signUp = async (
-	email: string,
-	password: string,
-	name: string,
-	clinicName: string,
-	prcNumber: number
-) => {
-	return await createUserWithEmailAndPassword(auth, email, password)
-		.then((userCredential) => {
-			const user = userCredential.user;
-			setDoc(doc(db, "doctors", user.uid), {
-				email,
-				name,
-				clinicName,
-				prcNumber,
-			});
-		})
-		.catch();
-};
-
-// const addNewPatient(name, dob, address, procedures) {
-
-// }
-
-export { app, db, auth, signUp, signIn };
+export { app, db, auth };
