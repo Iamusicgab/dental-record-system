@@ -8,6 +8,7 @@ import {
 	collection,
 	doc,
 	Timestamp,
+	getDocs,
 } from "@firebase/firestore";
 import {
 	signInWithEmailAndPassword,
@@ -68,6 +69,35 @@ const addNewPatient = async (
 	}
 };
 
+const getExistingPatients = async () => {
+	const userId = auth.currentUser?.uid || "";
+	const patients = collection(db, "doctors", userId, "patients");
+	const data = await getDocs(patients);
+
+	return data.docs.map((doc) => {
+		return {
+			id: doc.id,
+			...doc.data(),
+		};
+	});
+};
+
+const addProcedure = async (patientId: string, procedure: string) => {
+	const userId = auth.currentUser?.uid || "";
+	try {
+		const add = await addDoc(
+			collection(db, "doctors", userId, "patients", patientId, "procedures"),
+			{
+				procedureName: procedure,
+				date: Timestamp.now(),
+			}
+		);
+		return add;
+	} catch {
+		console.log("error");
+	}
+};
+
 function UserContext({ children }: { children: React.ReactNode }) {
 	const [currentUser, setCurrentUser] = useState<any>();
 	const [loading, setLoading] = useState(true);
@@ -94,4 +124,4 @@ function UserContext({ children }: { children: React.ReactNode }) {
 }
 
 export default UserContext;
-export { signIn, signUp, addNewPatient };
+export { signIn, signUp, addNewPatient, getExistingPatients, addProcedure };
