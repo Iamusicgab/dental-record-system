@@ -69,7 +69,7 @@ function Home() {
 					</button>
 					<button
 						onClick={() => {
-							navButton("/new");
+							navButton("/type");
 						}}
 						className="btn btn-primary flex flex-grow justify-center items-center rounded-2xl border-4 border-primary-accent"
 					>

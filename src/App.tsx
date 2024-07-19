@@ -5,10 +5,13 @@ import Prescription from "./pages/prescription";
 import Patients from "./pages/patients";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
+import Type from "./pages/type";
 import PatientsPlaceholder from "./pages/patientsPlaceholder";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import UserContext from "./components/userContext";
 import PrivateRoute from "./components/PrivateRoute";
+import ProcedurePlaceholder from "./pages/procedurePlaceholder";
+import Existing from "./pages/existing";
 
 function App() {
 	return (
@@ -20,11 +23,17 @@ function App() {
 						<Route path="/signup" element={<Signup />} />
 						<Route element={<PrivateRoute />}>
 							<Route path="/" element={<Home />} />
+							<Route path="type" element={<Type />} />
 							<Route path="/new" element={<New />} />
+							<Route path="/existing" element={<Existing />} />
 							<Route path="/appointment" element={<Appointment />} />
 							<Route path="/prescription" element={<Prescription />} />
 							<Route path="/patients" element={<Patients />} />
 							<Route path="/patients/:id" element={<PatientsPlaceholder />} />
+							<Route
+								path="/patients/:id/:procedureid"
+								element={<ProcedurePlaceholder />}
+							/>
 						</Route>
 					</Routes>
 				</UserContext>
