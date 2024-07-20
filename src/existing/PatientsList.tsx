@@ -3,7 +3,7 @@ import { useExistingContext } from "../components/existingContext";
 import { getExistingPatients } from "../components/userContext";
 
 export default function PatientsList() {
-	const [patients, setPatients] = useState([]);
+	const [patients, setPatients] = useState<any>([]);
 	const [loading, setLoading] = useState(true);
 
 	const getPatients = async () => {
@@ -14,13 +14,13 @@ export default function PatientsList() {
 	};
 
 	const handleClick = (id: string) => {
-		console.log(id);
 		setPage((prev: any) => prev + 1);
 		console.log(page);
+		setData({ ...data, uid: id });
+		console.log(data);
 	};
 
 	useEffect(() => {
-		setData({ uid: "nigger", procedures: [] });
 		getPatients();
 	}, []);
 	const { data, setData, setPage, page } = useExistingContext();
@@ -29,7 +29,7 @@ export default function PatientsList() {
 			{loading ? (
 				<div>loading</div>
 			) : (
-				patients.map((patient, index) => {
+				patients.map((patient: any, index: number) => {
 					return (
 						<button
 							onClick={() => {

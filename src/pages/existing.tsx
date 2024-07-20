@@ -1,22 +1,12 @@
-import { useEffect, useState } from "react";
-import PatientsList from "../existing/PatientsList";
-import ExistingContext, {
-	useExistingContext,
-} from "../components/existingContext";
+import ExistingContext from "../components/existingContext";
+import Wrapper from "../existing/Wrapper";
 
 function Existing() {
-	const { data, page, setPage } = useExistingContext();
-	useEffect(() => {
-		setPage(0);
-		console.log(page);
-	}, []);
-	const pages: any = {
-		0: <PatientsList />,
-		1: "Procedures",
-		2: "Prescriptions",
-	};
-
-	return <ExistingContext>{pages[page]}</ExistingContext>;
+	return (
+		<ExistingContext>
+			<Wrapper />
+		</ExistingContext>
+	);
 }
 
 export default Existing;
