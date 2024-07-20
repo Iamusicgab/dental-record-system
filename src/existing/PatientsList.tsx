@@ -15,13 +15,15 @@ export default function PatientsList() {
 
 	const handleClick = (id: string) => {
 		console.log(id);
+		setPage((prev: any) => prev + 1);
+		console.log(page);
 	};
 
 	useEffect(() => {
 		setData({ uid: "nigger", procedures: [] });
 		getPatients();
 	}, []);
-	const { data, setData } = useExistingContext();
+	const { data, setData, setPage, page } = useExistingContext();
 	return (
 		<div>
 			{loading ? (
