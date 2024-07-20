@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useExistingContext } from "../components/existingContext";
-import { getExistingPatients } from "../components/userContext";
+import { useExistingContext } from "../Hooks/existingContext";
+import { getExistingPatients } from "../Hooks/userContext";
 
 export default function PatientsList() {
 	const [patients, setPatients] = useState<any>([]);

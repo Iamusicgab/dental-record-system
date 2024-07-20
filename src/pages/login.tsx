@@ -1,8 +1,8 @@
-import { signIn } from "../components/userContext";
+import { signIn } from "../Hooks/userContext";
 
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../components/userContext";
+import { AuthContext } from "../Hooks/userContext";
 
 function Login() {
 	const currentUser = useContext(AuthContext);

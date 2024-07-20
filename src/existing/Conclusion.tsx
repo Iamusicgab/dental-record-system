@@ -1,6 +1,6 @@
 import React from "react";
-import { useExistingContext } from "../components/existingContext";
-import { addProcedure } from "../components/userContext";
+import { useExistingContext } from "../Hooks/existingContext";
+import { addProcedure } from "../Hooks/userContext";
 
 export default function Conclusion() {
 	const { data, setData, setPage } = useExistingContext();

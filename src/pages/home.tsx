@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import calendarPic from "../assets/calendar.svg";
 import rxPic from "../assets/rx.svg";
 import addPic from "../assets/add.svg";
 import dbPic from "../assets/db.svg";
-// import settingsPic from "../assets/settings.svg";
+import { AuthContext } from "../Hooks/userContext";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
+	const currentUser = useContext(AuthContext);
 	const [doctorFirstname, setDoctorFirstname] = useState("n/a");
 	const [activeAppointmentsToday, setActiveAppointmentsToday] = useState(2);
 	const [isSignedIn, setIsSignedIn] = useState(false);

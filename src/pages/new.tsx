@@ -1,4 +1,4 @@
-import { addNewPatient } from "../components/userContext";
+import { addNewPatient } from "../Hooks/userContext";
 import { useState } from "react";
 
 function New() {

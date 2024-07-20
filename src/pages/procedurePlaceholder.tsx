@@ -3,7 +3,7 @@ import { db } from "../components/firebase";
 import { useState } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "../components/userContext";
+import { AuthContext } from "../Hooks/userContext";
 
 function ProcedurePlaceholder() {
 	const [loading, setLoading] = useState(true);
