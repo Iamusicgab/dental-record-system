@@ -10,6 +10,8 @@ import {
 	Timestamp,
 	getDocs,
 	getDoc,
+	query,
+	orderBy,
 } from "@firebase/firestore";
 import {
 	signInWithEmailAndPassword,
@@ -42,37 +44,40 @@ const signUp = async (
 	);
 };
 
-const addNewPatient = async (
-	name: string,
-	dob: string,
-	address: string,
-	procedures: any,
-	contactNumber?: number
-) => {
+const addNewPatient = async (data: any) => {
 	const userId = auth.currentUser?.uid || "";
 	try {
 		const add = await addDoc(collection(db, "doctors", userId, "patients"), {
-			name,
-			dob,
-			address,
+			name: data.name,
+			dob: data.dob,
+			phoneNumber: data.phoneNumber,
+			address: data.address,
+			bloodType: data.bloodType,
+			allergies: data.allergies,
+			medications: data.medications,
 		});
 
 		await addDoc(
 			collection(db, "doctors", userId, "patients", add.id, "procedures"),
 			{
-				procedureName: procedures,
+				procedureName: data.procedure,
+
 				date: Timestamp.now(),
 			}
 		);
 		return add;
 	} catch {
 		console.log("error");
+		throw new Error("Error adding patient");
 	}
 };
 
 const getExistingPatients = async () => {
 	const userId = auth.currentUser?.uid || "";
-	const patients = collection(db, "doctors", userId, "patients");
+	const patients = query(
+		collection(db, "doctors", userId, "patients"),
+		orderBy("name", "asc")
+	);
 	const data = await getDocs(patients);
 
 	return data.docs.map((doc) => {
@@ -90,13 +95,18 @@ const getPatientData = async (patientId: string) => {
 	return data.data();
 };
 
-const addProcedure = async (patientId: string, procedure: string) => {
+const addProcedure = async (
+	patientId: string,
+	procedure: string,
+	description: string
+) => {
 	const userId = auth.currentUser?.uid || "";
 	try {
 		const add = await addDoc(
 			collection(db, "doctors", userId, "patients", patientId, "procedures"),
 			{
 				procedureName: procedure,
+				description,
 				date: Timestamp.now(),
 			}
 		);

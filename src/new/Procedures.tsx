@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { useExistingContext } from "../Hooks/existingContext";
 import { Header } from "../components/Header";
+import { useNewContext } from "../Hooks/NewUserContext";
 
 export default function Procedures() {
-	const { data, setData, Prev, Next } = useExistingContext();
+	const { data, setData, Prev, Next } = useNewContext();
 	const handleChange = (e: any) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 		console.log(data);

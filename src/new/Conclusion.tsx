@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useExistingContext } from "../Hooks/existingContext";
-import { addProcedure } from "../Hooks/userContext";
+import { addNewPatient, addProcedure } from "../Hooks/userContext";
 import { Header } from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import { useNewContext } from "../Hooks/NewUserContext";
 
 export default function Conclusion() {
 	const nav = useNavigate();
-	const { data, Prev } = useExistingContext();
+	const { data, Prev } = useNewContext();
 	const [dialog, setDialog] = useState(false);
 	const [errorDialog, setErrorDialog] = useState(false);
 	const [error, setError] = useState("");
@@ -14,12 +14,13 @@ export default function Conclusion() {
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
-			await addProcedure(data.uid, data.procedure, data.description);
+			await addNewPatient(data);
 			setLoading(false);
 			setDialog(true);
 		} catch {
 			setError("Something went wrong");
 			setErrorDialog(true);
+			setLoading(false);
 		}
 	};
 	const handleModalClose = () => {
@@ -39,12 +40,45 @@ export default function Conclusion() {
 						<span className="font-semibold">{data.name}</span>
 					</div>
 					<div className="flex flex-col gap-1">
+						<span className="text-xs">Contact Number:</span>
+						<span className="font-semibold">{data.phoneNumber}</span>
+					</div>
+					<div className="flex flex-col gap-1">
+						<span className="text-xs">Date of Birth:</span>
+						<span className="font-semibold">
+							{(() => {
+								const date = new Date(data.dob);
+								return date.toDateString().split(" ").slice(1).join(" ");
+							})()}
+						</span>
+					</div>
+					<div className="flex flex-col gap-1">
+						<span className="text-xs">Address:</span>
+						<span className="font-semibold">{data.address}</span>
+					</div>
+					<div className="flex flex-col gap-1">
+						<span className="text-xs">Blood Type:</span>
+						<span className="font-semibold">{data.bloodType}</span>
+					</div>
+					<div className="flex flex-col gap-1">
+						<span className="text-xs">Allergies:</span>
+						<span className="font-semibold">
+							{!data.allergies ? <>No Allergies</> : data.allergies}
+						</span>
+					</div>
+					<div className="flex flex-col gap-1">
+						<span className="text-xs">Medications:</span>
+						<span className="font-semibold">
+							{!data.medications ? <>No Medicaitons</> : data.medications}
+						</span>
+					</div>
+					<div className="flex flex-col gap-1">
 						<span className="text-xs">Procedure:</span>
 						<span className="font-semibold">{data.procedure}</span>
 					</div>
 					<div className="flex flex-col gap-1">
 						<span className="text-xs">Description:</span>
-						<span className="font-semibold">
+						<span className="font-semibold mb-24">
 							{data.description == "" ? (
 								<div>No Description</div>
 							) : (
@@ -53,20 +87,22 @@ export default function Conclusion() {
 						</span>
 					</div>
 				</div>
-				<div className="flex gap-2">
-					<button
-						onClick={Prev}
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Back
-					</button>
-					<button
-						disabled={loading}
-						onClick={handleSubmit}
-						className="btn btn-secondary text-base-100 border-2 border-secondary-accent grow"
-					>
-						{loading ? "Loading..." : "Submit"}
-					</button>
+				<div className="fixed z-50 bottom-0 left-0 w-full p-4">
+					<div className="flex gap-2">
+						<button
+							onClick={Prev}
+							className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
+						>
+							Back
+						</button>
+						<button
+							disabled={loading}
+							onClick={handleSubmit}
+							className="btn btn-secondary text-base-100 border-2 border-secondary-accent grow"
+						>
+							{loading ? "Loading..." : "Submit"}
+						</button>
+					</div>
 				</div>
 			</div>
 			<dialog

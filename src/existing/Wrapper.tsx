@@ -5,7 +5,7 @@ import Procedures from "../existing/Procedures";
 import Conclusion from "./Conclusion";
 
 export default function Wrapper() {
-	const { data, page, setPage } = useExistingContext();
+	const { page } = useExistingContext();
 	useEffect(() => {
 		console.log(page);
 	}, []);

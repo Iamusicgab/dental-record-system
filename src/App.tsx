@@ -12,6 +12,7 @@ import UserContext from "./Hooks/userContext";
 import PrivateRoute from "./components/PrivateRoute";
 import ProcedurePlaceholder from "./pages/procedurePlaceholder";
 import Existing from "./pages/existing";
+import Photo from "./new/Photo";
 
 function App() {
 	return (
@@ -19,12 +20,14 @@ function App() {
 			<BrowserRouter>
 				<UserContext>
 					<Routes>
+						<Route path="/new" element={<New />} />
+						<Route path="/camera" element={<Photo />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
 						<Route element={<PrivateRoute />}>
 							<Route path="/" element={<Home />} />
 							<Route path="type" element={<Type />} />
-							<Route path="/new" element={<New />} />
+
 							<Route path="/existing" element={<Existing />} />
 							<Route path="/appointment" element={<Appointment />} />
 							<Route path="/prescription" element={<Prescription />} />

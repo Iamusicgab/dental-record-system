@@ -4,6 +4,7 @@ import { useState } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../Hooks/userContext";
+import { Header } from "../components/Header";
 
 function ProcedurePlaceholder() {
 	const [loading, setLoading] = useState(true);
@@ -33,15 +34,35 @@ function ProcedurePlaceholder() {
 	}, []);
 	return (
 		<>
+			<Header name="Procedure Info" backRef={`/patients/${id}`} />
 			{loading ? (
 				<h1>Loading...</h1>
 			) : (
 				<div>
-					<h1>Procedure Placeholder of {procedureid}</h1>
-					<h1>{procedures.procedureName}</h1>
-					<p>
-						<span>{procedures.date.toDate().toLocaleString()}</span>
-					</p>
+					<div className="flex flex-col gap-4 mt-4">
+						<div className="flex flex-col gap-1">
+							<span className="text-xs">Procedure:</span>
+							<span className="font-semibold">{procedures.procedureName}</span>
+						</div>
+						<div className="flex flex-col gap-1">
+							<span className="text-xs">Date:</span>
+
+							<span className="font-semibold">
+								{procedures.date.toDate().toDateString()} at{" "}
+								{procedures.date.toDate().toLocaleTimeString()}
+							</span>
+						</div>
+						<div className="flex flex-col gap-1">
+							<span className="text-xs">Description:</span>
+							<span className="font-semibold">
+								{procedures.description == "" ? (
+									<div>No Description</div>
+								) : (
+									procedures.description
+								)}
+							</span>
+						</div>
+					</div>
 				</div>
 			)}
 		</>
