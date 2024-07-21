@@ -63,6 +63,8 @@ const addNewPatient = async (data: any) => {
 			collection(db, "doctors", userId, "patients", add.id, "procedures"),
 			{
 				procedureName: data.procedure,
+				description: data.description,
+				teeth: data.teeth,
 
 				date: Timestamp.now(),
 			}
@@ -120,7 +122,8 @@ const getPatientData = async (patientId: string) => {
 const addProcedure = async (
 	patientId: string,
 	procedure: string,
-	description: string
+	description: string,
+	teeth: any
 ) => {
 	const userId = auth.currentUser?.uid || "";
 	try {
@@ -129,6 +132,7 @@ const addProcedure = async (
 			{
 				procedureName: procedure,
 				description,
+				teeth,
 				date: Timestamp.now(),
 			}
 		);

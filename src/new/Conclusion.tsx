@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { addNewPatient, addProcedure } from "../Hooks/userContext";
+import { useState, useEffect } from "react";
+import { addNewPatient } from "../Hooks/userContext";
 import { Header } from "../components/Header";
 import { useNavigate } from "react-router-dom";
 import { useNewContext } from "../Hooks/NewUserContext";
+import TeethPlace from "../components/TeethPlace";
 
 export default function Conclusion() {
 	const nav = useNavigate();
@@ -11,6 +12,10 @@ export default function Conclusion() {
 	const [errorDialog, setErrorDialog] = useState(false);
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		console.log(data);
+	}, []);
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
@@ -78,13 +83,17 @@ export default function Conclusion() {
 					</div>
 					<div className="flex flex-col gap-1">
 						<span className="text-xs">Description:</span>
-						<span className="font-semibold mb-24">
+						<span className="font-semibold">
 							{data.description == "" ? (
 								<div>No Description</div>
 							) : (
 								data.description
 							)}
 						</span>
+					</div>
+					<div>
+						<span className="text-xs">Dental Chart:</span>
+						<TeethPlace data={data.teeth} />
 					</div>
 				</div>
 				<div className="fixed z-50 bottom-0 left-0 w-full p-4">

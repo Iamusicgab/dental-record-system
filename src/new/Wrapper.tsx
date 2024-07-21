@@ -6,6 +6,7 @@ import Conclusion from "./Conclusion";
 import { useNewContext } from "../Hooks/NewUserContext";
 import BeforePhoto from "./BeforePhoto";
 import AfterPhoto from "./AfterPhoto";
+import Teeth from "./Teeth";
 
 export default function Wrapper() {
 	const { page } = useNewContext();
@@ -16,7 +17,8 @@ export default function Wrapper() {
 		3: <AfterPhoto />,
 		4: <MedicalInfo />,
 		5: <Procedures />,
-		6: <Conclusion />,
+		6: <Teeth />,
+		7: <Conclusion />,
 	};
 	return <div>{pages[page]}</div>;
 }

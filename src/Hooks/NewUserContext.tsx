@@ -18,6 +18,7 @@ export default function NewUserContext({ children }: any) {
 		bloodType: "",
 		procedure: "",
 		description: "",
+		teeth: {},
 	});
 	const Next = () => {
 		setPage((prev: any) => prev + 1);

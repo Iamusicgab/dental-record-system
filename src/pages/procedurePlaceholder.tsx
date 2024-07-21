@@ -5,6 +5,7 @@ import { getDoc, doc } from "firebase/firestore";
 import { useContext, useEffect } from "react";
 import { AuthContext, deleteProcedure } from "../Hooks/userContext";
 import { Header } from "../components/Header";
+import TeethPlace from "../components/TeethPlace";
 
 function ProcedurePlaceholder() {
 	const [loading, setLoading] = useState(true);
@@ -82,6 +83,7 @@ function ProcedurePlaceholder() {
 								)}
 							</span>
 						</div>
+						<TeethPlace data={procedures.teeth} />
 						<div>
 							<button
 								disabled={loading}

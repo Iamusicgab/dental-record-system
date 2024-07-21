@@ -3,6 +3,7 @@ import { useExistingContext } from "../Hooks/existingContext";
 import { addProcedure } from "../Hooks/userContext";
 import { Header } from "../components/Header";
 import { useNavigate } from "react-router-dom";
+import TeethPlace from "../components/TeethPlace";
 
 export default function Conclusion() {
 	const nav = useNavigate();
@@ -14,7 +15,7 @@ export default function Conclusion() {
 	const handleSubmit = async () => {
 		try {
 			setLoading(true);
-			await addProcedure(data.uid, data.procedure, data.description);
+			await addProcedure(data.uid, data.procedure, data.description, data.teeth);
 			setLoading(false);
 			setDialog(true);
 		} catch {
@@ -52,6 +53,7 @@ export default function Conclusion() {
 							)}
 						</span>
 					</div>
+					<TeethPlace data={data.teeth} />
 				</div>
 				<div className="flex gap-2">
 					<button

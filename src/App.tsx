@@ -12,6 +12,7 @@ import UserContext from "./Hooks/userContext";
 import PrivateRoute from "./components/PrivateRoute";
 import ProcedurePlaceholder from "./pages/procedurePlaceholder";
 import Existing from "./pages/existing";
+import Teeth from "./new/Teeth";
 
 function App() {
 	return (
@@ -19,6 +20,7 @@ function App() {
 			<BrowserRouter>
 				<UserContext>
 					<Routes>
+						<Route path="/teeth" element={<Teeth />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
 						<Route element={<PrivateRoute />}>
