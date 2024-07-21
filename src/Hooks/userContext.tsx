@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createContext, useContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../components/firebase";
+import { auth, db, storage } from "../components/firebase";
 import {
 	addDoc,
 	setDoc,
@@ -12,11 +12,13 @@ import {
 	getDoc,
 	query,
 	orderBy,
+	deleteDoc,
 } from "@firebase/firestore";
 import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
 } from "firebase/auth";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 export const AuthContext = createContext<any>(null);
 
@@ -65,9 +67,20 @@ const addNewPatient = async (data: any) => {
 				date: Timestamp.now(),
 			}
 		);
+
+		const storageRef = ref(
+			storage,
+			`doctors/${userId}/patients/${add.id}/picture.jpg`
+		);
+		const imageBlob = await fetch(data.picture).then((response) =>
+			response.blob()
+		);
+		console.log(imageBlob);
+		await uploadBytes(storageRef, imageBlob);
+
 		return add;
-	} catch {
-		console.log("error");
+	} catch (err) {
+		console.log(err);
 		throw new Error("Error adding patient");
 	}
 };
@@ -91,8 +104,17 @@ const getExistingPatients = async () => {
 const getPatientData = async (patientId: string) => {
 	const userId = auth.currentUser?.uid || "";
 	const patient = doc(db, "doctors", userId, "patients", patientId);
+	const pictureRef = ref(
+		storage,
+		`doctors/${userId}/patients/${patientId}/picture.jpg`
+	);
+	const picture = await getDownloadURL(pictureRef);
 	const data = await getDoc(patient);
-	return data.data();
+	return {
+		id: data.id,
+		...data.data(),
+		picture,
+	};
 };
 
 const addProcedure = async (
@@ -113,6 +135,36 @@ const addProcedure = async (
 		return add;
 	} catch {
 		console.log("error");
+	}
+};
+
+const deletePatient = async (patientId: any) => {
+	const userId = auth.currentUser?.uid || "";
+
+	try {
+		const data = doc(db, "doctors", userId, "patients", patientId);
+		await deleteDoc(data);
+	} catch {
+		throw new Error("Error deleting patient");
+	}
+};
+
+const deleteProcedure = async (patientId: any, docId: any) => {
+	const userId = auth.currentUser?.uid || "";
+
+	try {
+		const data = doc(
+			db,
+			"doctors",
+			userId,
+			"patients",
+			patientId,
+			"procedures",
+			docId
+		);
+		await deleteDoc(data);
+	} catch {
+		throw new Error("Error deleting patient");
 	}
 };
 
@@ -149,4 +201,6 @@ export {
 	getExistingPatients,
 	addProcedure,
 	getPatientData,
+	deletePatient,
+	deleteProcedure,
 };

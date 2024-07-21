@@ -48,7 +48,7 @@ function Home() {
 				</div>
 			</div>
 
-			<nav className="relative bottom-0">
+			<nav className="fixed left-0 bottom-0 w-full p-4">
 				<div className="flex w-full justify-around gap-2">
 					<button
 						onClick={() => {

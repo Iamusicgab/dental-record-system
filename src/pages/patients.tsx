@@ -1,16 +1,11 @@
 import { Header } from "../components/Header";
-import { db } from "../components/firebase";
 import { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { AuthContext, getExistingPatients } from "../Hooks/userContext";
-import { useContext } from "react";
+import { getExistingPatients } from "../Hooks/userContext";
 import { Link } from "react-router-dom";
-import Back from "../assets/back.svg";
 function Patients() {
-	const currentUser = useContext(AuthContext);
+	const [loading, setLoading] = useState(true);
 	const [patients, setPatients] = useState<Array<Patient>>([]);
 	const [query, setQuery] = useState("");
-	const patientsdb = collection(db, "doctors", currentUser.uid, "patients");
 	interface Patient {
 		id: string;
 		name: string;
@@ -21,12 +16,15 @@ function Patients() {
 	const getPatients = async () => {
 		const data = await getExistingPatients();
 		setPatients(data);
+		setLoading(false);
 	};
 
 	useEffect(() => {
 		getPatients();
 	}, []);
-	return (
+	return loading ? (
+		<>Loading</>
+	) : (
 		<div className="flex flex-col gap-4">
 			<Header name="Patient Database" backRef="/" />
 			<div className="flex flex-col gap-2">

@@ -3,14 +3,21 @@ import { db } from "../components/firebase";
 import { useState } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "../Hooks/userContext";
+import { AuthContext, deletePatient } from "../Hooks/userContext";
 import { Link } from "react-router-dom";
 import { getPatientData } from "../Hooks/userContext";
 import { Header } from "../components/Header";
 import samplepic from "../assets/samplepic.jpg";
+import deletePic from "../assets/trash.svg";
+import { useNavigate } from "react-router-dom";
 
 function PatientsPlaceholder() {
+	const nav = useNavigate();
 	const [patient, setPatient] = useState<any>();
+	const [error, setError] = useState("");
+	const [successModal, setSuccessModal] = useState(false);
+	const [warningDialog, setWarningDialog] = useState(false);
+	const [errorDialog, setErrorDialog] = useState(false);
 	const [procedures, setProcedures] = useState<any>([]);
 	const [loading, setLoading] = useState(true);
 	const { id } = useParams();
@@ -31,6 +38,23 @@ function PatientsPlaceholder() {
 			...doc.data(),
 		}));
 		setProcedures(finalData);
+	};
+
+	const handleDelete = async () => {
+		try {
+			setLoading(true);
+			await deletePatient(id);
+			setLoading(false);
+			setSuccessModal(true);
+		} catch {
+			console.log("error");
+			setError("Error deleting procedure");
+			setErrorDialog(true);
+		}
+	};
+	const handleSuccessModalClose = () => {
+		setSuccessModal(false);
+		nav("/patients");
 	};
 
 	const PatientData = async () => {
@@ -56,17 +80,12 @@ function PatientsPlaceholder() {
 								<span className="font-semibold">{patient.name}</span>
 							</div>
 							<div className="inline-flex flex-col">
-								<span className="text-xs">Address</span>
-								<span className="font-semibold">{patient.address}</span>
+								<span className="text-xs">Contact Number</span>
+								<span className="font-semibold">{patient.phoneNumber}</span>
 							</div>
 							<div className="inline-flex flex-col">
-								<span className="text-xs">Date of Birth</span>
-								<span className="font-semibold">
-									{(() => {
-										const dob = new Date(patient.dob);
-										return dob.toDateString().split(" ").slice(1).join(" ");
-									})()}
-								</span>
+								<span className="text-xs">Address</span>
+								<span className="font-semibold">{patient.address}</span>
 							</div>
 							<div className="inline-flex flex-col">
 								<span className="text-xs">Age</span>
@@ -81,6 +100,28 @@ function PatientsPlaceholder() {
 								</span>
 							</div>
 							<div className="inline-flex flex-col">
+								<span className="text-xs">Date of Birth</span>
+								<span className="font-semibold">
+									{(() => {
+										const dob = new Date(patient.dob);
+										return dob.toDateString().split(" ").slice(1).join(" ");
+									})()}
+								</span>
+							</div>
+							<div className="inline-flex flex-col">
+								<span className="text-xs">Blood Type</span>
+								<span className="font-semibold">{patient.bloodType}</span>
+							</div>
+							<div className="inline-flex flex-col">
+								<span className="text-xs">Medications</span>
+								{!patient.medications ? (
+									<span className="font-semibold">No Medications</span>
+								) : (
+									<span className="font-semibold">{patient.medications}</span>
+								)}
+							</div>
+
+							<div className="inline-flex flex-col">
 								<span className="text-xs">Allergies</span>
 								{!patient.allergies ? (
 									<span className="font-semibold">No Allergies</span>
@@ -89,12 +130,21 @@ function PatientsPlaceholder() {
 								)}
 							</div>
 						</div>
-						<div>
-							<img
-								className="aspect-square max-w-20 object-cover rounded-xl"
-								src={samplepic}
-								alt="Patient Picture"
-							/>
+						<div className="flex flex-col justify-between items-end">
+							<div>
+								<img
+									className="aspect-square max-w-20 object-cover rounded-xl"
+									src={patient.picture || ""}
+									alt="Patient Picture"
+								/>
+							</div>
+							<button
+								disabled={loading}
+								onClick={() => setWarningDialog(true)}
+								className="btn w-12 h-12 bg-warning p-[12px] rounded-md border-warning-content"
+							>
+								<img src={deletePic} alt="Delete" />
+							</button>
 						</div>
 					</div>
 					<div className="flex flex-col gap-2">
@@ -122,6 +172,105 @@ function PatientsPlaceholder() {
 					</div>
 				</>
 			)}
+			<dialog
+				id="my_modal_5"
+				open={successModal}
+				className="modal modal-bottom sm:modal-middle"
+			>
+				<div className="modal-box">
+					<div role="alert" className="alert alert-success">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-6 w-6 shrink-0 stroke-current"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+						<span>Patient has been deleted</span>
+					</div>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button onClick={handleSuccessModalClose} className="btn">
+								Close
+							</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="my_modal_5"
+				open={errorDialog}
+				className="modal modal-bottom sm:modal-middle"
+			>
+				<div className="modal-box">
+					<div role="alert" className="alert alert-warning">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-6 w-6 shrink-0 stroke-current"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+							/>
+						</svg>
+						<span>{error}</span>
+					</div>
+					<div className="modal-action">
+						<form method="dialog">
+							{/* if there is a button in form, it will close the modal */}
+							<button onClick={() => setErrorDialog(false)} className="btn">
+								Close
+							</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
+			<dialog
+				id="my_modal_5"
+				open={warningDialog}
+				className="modal modal-bottom sm:modal-middle"
+			>
+				<div className="modal-box">
+					<div role="alert" className="alert alert-error">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							className="h-6 w-6 shrink-0 stroke-current"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth="2"
+								d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+							/>
+						</svg>
+						<span>Are you sure you want to delete this patient?</span>
+					</div>
+					<div className="modal-action ">
+						<form method="dialog" className="grid grid-flow-col gap-2">
+							<button onClick={() => setWarningDialog(false)} className="btn">
+								Back
+							</button>
+							{/* if there is a button in form, it will close the modal */}
+							<button onClick={handleDelete} className="btn btn-warning">
+								Delete
+							</button>
+						</form>
+					</div>
+				</div>
+			</dialog>
 		</div>
 	);
 }
