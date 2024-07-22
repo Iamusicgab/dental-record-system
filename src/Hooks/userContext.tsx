@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db, storage } from "../components/firebase";
 import {
@@ -19,11 +19,18 @@ import {
 	createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { set } from "firebase/database";
+import { setCurrentScreen } from "firebase/analytics";
 
 export const AuthContext = createContext<any>(null);
 
 const signIn = async (email: string, password: string) => {
-	return await signInWithEmailAndPassword(auth, email, password);
+	try {
+		return await signInWithEmailAndPassword(auth, email, password);
+	} catch (err: any) {
+		console.log(err);
+		throw new Error(err);
+	}
 };
 
 const signUp = async (
@@ -33,17 +40,30 @@ const signUp = async (
 	clinicName: string,
 	prcNumber: number
 ) => {
-	return await createUserWithEmailAndPassword(auth, email, password).then(
-		(userCredential) => {
-			const user = userCredential.user;
-			setDoc(doc(db, "doctors", user.uid), {
-				email,
-				name,
-				clinicName,
-				prcNumber,
-			});
-		}
-	);
+	try {
+		return await createUserWithEmailAndPassword(auth, email, password).then(
+			(userCredential) => {
+				const user = userCredential.user;
+				setDoc(doc(db, "doctors", user.uid), {
+					email,
+					name,
+					clinicName,
+					prcNumber,
+				});
+			}
+		);
+	} catch (err: any) {
+		console.log(err);
+		throw new Error(err);
+	}
+};
+
+const logout = async () => {
+	try {
+		await auth.signOut();
+	} catch (err: any) {
+		throw new Error(err);
+	}
 };
 
 const addNewPatient = async (data: any) => {
@@ -119,6 +139,14 @@ const getPatientData = async (patientId: string) => {
 	};
 };
 
+const getDoctorData = async () => {
+	const userId = auth.currentUser?.uid || "";
+	const doctor = doc(db, "doctors", userId);
+	const data = await getDoc(doctor);
+	const finalData = data.data();
+	return finalData;
+};
+
 const addProcedure = async (
 	patientId: string,
 	procedure: string,
@@ -179,7 +207,6 @@ function UserContext({ children }: { children: React.ReactNode }) {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 			setLoading(false);
 			if (user) {
-				console.log(user);
 				setCurrentUser(user);
 			} else {
 				console.log("not logged in");
@@ -207,4 +234,6 @@ export {
 	getPatientData,
 	deletePatient,
 	deleteProcedure,
+	logout,
+	getDoctorData,
 };

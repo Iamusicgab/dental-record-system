@@ -999,19 +999,21 @@ export default function Teeth() {
 					</svg>
 				</div>
 			</div>
-			<div className="flex gap-2">
-				<button
-					onClick={Prev}
-					className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-				>
-					Back
-				</button>
-				<button
-					onClick={Next}
-					className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-				>
-					Next
-				</button>
+			<div className="fixed bottom-0 left-0 p-4 w-full">
+				<div className="flex gap-2">
+					<button
+						onClick={Prev}
+						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
+					>
+						Back
+					</button>
+					<button
+						onClick={Next}
+						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
+					>
+						Next
+					</button>
+				</div>
 			</div>
 		</>
 	);

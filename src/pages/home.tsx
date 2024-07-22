@@ -1,39 +1,46 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import calendarPic from "../assets/calendar.svg";
 import rxPic from "../assets/rx.svg";
 import addPic from "../assets/add.svg";
 import dbPic from "../assets/db.svg";
 import settingsPic from "../assets/settings.svg";
-import { AuthContext } from "../Hooks/userContext";
+import { AuthContext, logout, getDoctorData } from "../Hooks/userContext";
 import { useNavigate } from "react-router-dom";
-import { settings } from "firebase/analytics";
+import { setDoc } from "firebase/firestore";
 
 function Home() {
 	const currentUser = useContext(AuthContext);
-	const [doctorFirstname, setDoctorFirstname] = useState("n/a");
-	const [activeAppointmentsToday, setActiveAppointmentsToday] = useState(2);
-	const [isSignedIn, setIsSignedIn] = useState(false);
+	const setDoctor = async () => {
+		const data = await getDoctorData();
+		setUser(data as any);
+	};
+	useEffect(() => {
+		if (currentUser) {
+			setUser(currentUser);
+			console.log(currentUser);
+			setDoctor();
+			setLoading(false);
+		}
+	}, []);
+	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
 	const nav = useNavigate();
 	const navButton = (link: string) => {
 		nav(link);
 	};
 
-	return (
+	return loading ? (
+		<>Loading</>
+	) : (
 		<div>
 			<h1 className="text-2xl font-bold">
 				Good day
 				<br />
-				Doc {doctorFirstname}!
+				Doc {user?.name?.split(" ")[0]}!
 			</h1>
 
 			<div>
-				<span className="font-bold">
-					You have
-					{activeAppointmentsToday === 0
-						? " no "
-						: ` ${activeAppointmentsToday} `}
-					Appointments today
-				</span>
+				<span className="font-bold">You have 0 Appointments today</span>
 				<div className="bg-secondary p-4 rounded-3xl border-4 border-secondary-accent">
 					<div className="flex gap-2">
 						<span className="w-20">1:30PM</span>
@@ -89,9 +96,7 @@ function Home() {
 						<span className="hidden md:inline">Patient Records</span>
 					</button>
 					<button
-						onClick={() => {
-							navButton("/settings");
-						}}
+						onClick={logout}
 						className=" transition p-2 min-w-9 bg-primary active:scale-[97%] hover:bg-primary-accent flex flex-grow justify-center items-center md:justify-start rounded-2xl border-4 border-primary-accent"
 					>
 						<img className="w-fit" src={settingsPic} alt="Patient Records" />

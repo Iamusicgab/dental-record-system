@@ -26,7 +26,9 @@ export default function PatientsList() {
 		getPatients();
 	}, []);
 	const { data, setData, setPage, page } = useExistingContext();
-	return (
+	return loading ? (
+		<>Loading</>
+	) : (
 		<div className="flex flex-col gap-4">
 			<Header name="Patient Database" backRef="/type" />
 			<h1 className="text-2xl font-bold text-neutral">
