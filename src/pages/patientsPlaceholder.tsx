@@ -7,7 +7,6 @@ import { AuthContext, deletePatient } from "../Hooks/userContext";
 import { Link } from "react-router-dom";
 import { getPatientData } from "../Hooks/userContext";
 import { Header } from "../components/Header";
-import samplepic from "../assets/samplepic.jpg";
 import deletePic from "../assets/trash.svg";
 import { useNavigate } from "react-router-dom";
 
