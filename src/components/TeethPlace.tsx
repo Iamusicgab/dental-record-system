@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 export default function TeethPlace(props: any) {
-	const [selected, setSelected] = useState({});
+	const [selected, setSelected] = useState<any>({});
 	const active = "transition fill-red-500";
 	const inactive = "transition fill-white hover:fill-red-200";
 	useEffect(() => {
