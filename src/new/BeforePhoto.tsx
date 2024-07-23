@@ -1,5 +1,4 @@
 import { useNewContext } from "../Hooks/NewUserContext";
-import { useContext } from "react";
 import { Header } from "../components/Header";
 import { BackNext } from "../components/BackNext";
 

@@ -19,8 +19,6 @@ import {
 	createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
-import { set } from "firebase/database";
-import { setCurrentScreen } from "firebase/analytics";
 
 export const AuthContext = createContext<any>(null);
 

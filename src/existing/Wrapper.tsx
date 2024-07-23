@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import { useExistingContext } from "../Hooks/existingContext";
 import PatientsList from "../existing/PatientsList";
 import Procedures from "../existing/Procedures";
