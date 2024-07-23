@@ -1,9 +1,10 @@
 import { useNewContext } from "../Hooks/NewUserContext";
 import { useContext } from "react";
 import { Header } from "../components/Header";
+import { BackNext } from "../components/BackNext";
 
 export default function BeforePhoto() {
-	const { Prev, Next } = useNewContext();
+	const { Prev, Next, Page } = useNewContext();
 
 	return (
 		<div className="grid gap-4">
@@ -11,20 +12,7 @@ export default function BeforePhoto() {
 			<h1 className="text-2xl font-bold text-neutral">
 				Nice! Let's take a photo!
 			</h1>
-			<div className="flex gap-2">
-				<button
-					onClick={Prev}
-					className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-				>
-					Back
-				</button>
-				<button
-					onClick={Next}
-					className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-				>
-					Next
-				</button>
-			</div>
+			<BackNext Prev={Prev} Next={Next} Page={Page} />
 		</div>
 	);
 }

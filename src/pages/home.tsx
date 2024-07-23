@@ -6,7 +6,6 @@ import dbPic from "../assets/db.svg";
 import settingsPic from "../assets/settings.svg";
 import { AuthContext, logout, getDoctorData } from "../Hooks/userContext";
 import { useNavigate } from "react-router-dom";
-import { setDoc } from "firebase/firestore";
 
 function Home() {
 	const currentUser = useContext(AuthContext);
@@ -22,9 +21,19 @@ function Home() {
 			setLoading(false);
 		}
 	}, []);
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState<any>(null);
 	const [loading, setLoading] = useState(true);
 	const nav = useNavigate();
+	const buttonDesign =
+		"transition p-2 md:p-4 py-4 md:h-32 bg-primary active:scale-[97%] hover:bg-primary-accent flex md:flex-col flex-grow justify-center items-center md:items-start md:justify-end gap-2 rounded-2xl border-4 border-primary-accent disabled:bg-gray-200 disabled:cursor-not-allowed disabled:border-gray-300";
+	const buttonDesignWarning =
+		"transition p-2 md:p-4 py-4 md:h-32 bg-warning active:scale-[97%] hover:bg-warning-accent flex md:flex-col flex-grow justify-center items-center md:items-start md:justify-end gap-2 rounded-2xl border-4 border-warning-accent disabled:bg-gray-200 disabled:cursor-not-allowed disabled:border-gray-300";
+	const inButtonDesign = "w-6 md:w-10";
+	const inButtonTextDesign = "text-white font-bold text-lg";
+	const handleSignOut = async () => {
+		await logout();
+		window.location.reload();
+	};
 	const navButton = (link: string) => {
 		nav(link);
 	};
@@ -33,13 +42,20 @@ function Home() {
 		<>Loading</>
 	) : (
 		<div>
-			<h1 className="text-2xl font-bold">
+			<h1 className="text-2xl font-bold text-accent">
 				Good day
 				<br />
-				Doc {user?.name?.split(" ")[0]}!
+				Doc{" "}
+				{(() => {
+					if (user) {
+						return user.name?.split(" ")[0];
+					}
+					return "";
+				})()}
+				!
 			</h1>
 
-			<div>
+			{/* <div>
 				<span className="font-bold">You have 0 Appointments today</span>
 				<div className="bg-secondary p-4 rounded-3xl border-4 border-secondary-accent">
 					<div className="flex gap-2">
@@ -55,55 +71,60 @@ function Home() {
 						</span>
 					</div>
 				</div>
-			</div>
+			</div> */}
 
-			<nav className="fixed md:inline left-0 bottom-0 w-full max-w-3xl p-4">
-				<div className="flex md:grid grid-cols-2 w-full justify-around gap-2">
-					<button
-						onClick={() => {
-							navButton("/appointment");
-						}}
-						className=" transition p-2 bg-primary active:scale-[97%] hover:bg-primary-accent flex flex-grow justify-center items-center md:justify-start rounded-2xl border-4 border-primary-accent"
-					>
-						<img className="w-fit" src={calendarPic} alt="Calendar" />
-						<span className="hidden md:inline">Set an Appointment</span>
-					</button>
-					<button
-						onClick={() => {
-							navButton("/prescription");
-						}}
-						className=" transition p-2 bg-primary active:scale-[97%] hover:bg-primary-accent flex flex-grow justify-center items-center md:justify-start rounded-2xl border-4 border-primary-accent"
-					>
-						<img className="w-fit" src={rxPic} alt="Prescription" />
-						<span className="hidden md:inline">Create a Prescription</span>
-					</button>
-					<button
-						onClick={() => {
-							navButton("/type");
-						}}
-						className=" transition p-2 bg-primary active:scale-[97%] hover:bg-primary-accent flex flex-grow justify-center items-center md:justify-start rounded-2xl border-4 border-primary-accent"
-					>
-						<img className="w-fit" src={addPic} alt="Create New Record" />
-						<span className="hidden md:inline">New Record</span>
-					</button>
-					<button
-						onClick={() => {
-							navButton("/patients");
-						}}
-						className=" transition p-2 bg-primary active:scale-[97%] hover:bg-primary-accent flex flex-grow justify-center items-center md:justify-start rounded-2xl border-4 border-primary-accent"
-					>
-						<img className="w-fit" src={dbPic} alt="Patient Records" />
-						<span className="hidden md:inline">Patient Records</span>
-					</button>
-					<button
-						onClick={logout}
-						className=" transition p-2 min-w-9 bg-primary active:scale-[97%] hover:bg-primary-accent flex flex-grow justify-center items-center md:justify-start rounded-2xl border-4 border-primary-accent"
-					>
-						<img className="w-fit" src={settingsPic} alt="Patient Records" />
-						<span className="hidden md:inline">Patient Records</span>
-					</button>
-				</div>
-			</nav>
+			<div className="grid grid-cols-1 lg:grid-cols-2 w-full max-w-screen-xl justify-around gap-2 p-4">
+				<button
+					disabled
+					onClick={() => {
+						navButton("/appointment");
+					}}
+					className={buttonDesign}
+				>
+					<img className={inButtonDesign} src={calendarPic} alt="Calendar" />
+					<span className={inButtonTextDesign}>Set an Appointment</span>
+				</button>
+				<button
+					disabled
+					onClick={() => {
+						navButton("/prescription");
+					}}
+					className={buttonDesign}
+				>
+					<img className={inButtonDesign} src={rxPic} alt="Prescription" />
+					<span className={inButtonTextDesign}>Create a Prescription</span>
+				</button>
+				<button
+					onClick={() => {
+						navButton("/type");
+					}}
+					className={buttonDesign}
+				>
+					<img
+						className={inButtonDesign}
+						src={addPic}
+						alt="Create New Record"
+					/>
+					<span className={inButtonTextDesign}>New Record</span>
+				</button>
+				<button
+					onClick={() => {
+						navButton("/patients");
+					}}
+					className={buttonDesign}
+				>
+					<img className={inButtonDesign} src={dbPic} alt="Patient Records" />
+					<span className={inButtonTextDesign}>Patient Records</span>
+				</button>
+				<button onClick={handleSignOut} className={buttonDesignWarning}>
+					<img
+						className={inButtonDesign}
+						src={settingsPic}
+						alt="Patient Records"
+					/>
+					<span className={inButtonTextDesign}>Sign Out</span>
+				</button>
+			</div>
 		</div>
 	);
 }

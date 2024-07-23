@@ -1,8 +1,9 @@
+import { BackNext } from "../components/BackNext";
 import { Header } from "../components/Header";
 import { useNewContext } from "../Hooks/NewUserContext";
 
 export default function Procedures() {
-	const { data, setData, Prev, Next } = useNewContext();
+	const { data, setData, Prev, Next, page } = useNewContext();
 	const handleChange = (e: any) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 		console.log(data);
@@ -35,20 +36,7 @@ export default function Procedures() {
 						onChange={handleChange}
 					/>
 				</div>
-				<div className="flex gap-2">
-					<button
-						onClick={Prev}
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Back
-					</button>
-					<button
-						type="submit"
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Next
-					</button>
-				</div>
+				<BackNext Prev={Prev} Next={null} Page={page} />
 			</form>
 		</>
 	);

@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Header } from "../components/Header";
 import { useNewContext } from "../Hooks/NewUserContext";
+import { BackNext } from "../components/BackNext";
 
 export default function MedicalInfo() {
-	const { Prev, Next, data, setData } = useNewContext();
+	const { Prev, Next, data, setData, page } = useNewContext();
 	useEffect(() => {
 		setData((prev: any) => ({ ...prev }));
 		console.log(data);
@@ -59,20 +60,7 @@ export default function MedicalInfo() {
 					value={data.medications || ""}
 					onChange={handleChange}
 				/>
-				<div className="flex gap-2">
-					<button
-						onClick={Prev}
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Back
-					</button>
-					<button
-						type="submit"
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Next
-					</button>
-				</div>
+				<BackNext Prev={Prev} Next={null} Page={page} />
 			</form>
 		</div>
 	);

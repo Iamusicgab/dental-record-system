@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useNewContext } from "../Hooks/NewUserContext";
 import { Header } from "../components/Header";
+import { BackNext } from "../components/BackNext";
 
 export default function AfterPhoto() {
 	useEffect(() => {
 		setData((prev: any) => ({ ...prev }));
 		console.log(data);
 	}, []);
-	const { data, setData, Prev, Next } = useNewContext();
+	const { data, setData, Prev, Next, page } = useNewContext();
 	return (
 		<div className="flex flex-col gap-4">
 			<Header name="Photo" backRef="/type"></Header>
@@ -23,20 +24,13 @@ export default function AfterPhoto() {
 						alt="After"
 					/>
 				</div>
-				<div className="flex gap-2">
-					<button
-						onClick={Prev}
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Take Again
-					</button>
-					<button
-						onClick={Next}
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Proceed
-					</button>
-				</div>
+				<BackNext
+					Prev={Prev}
+					Next={Next}
+					Page={page}
+					PrevPlaceholder={`Take Again`}
+					NextPlaceholder={`Proceed`}
+				/>
 			</div>
 		</div>
 	);

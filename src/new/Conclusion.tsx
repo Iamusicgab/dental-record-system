@@ -96,21 +96,23 @@ export default function Conclusion() {
 						<TeethPlace data={data.teeth} />
 					</div>
 				</div>
-				<div className="fixed z-50 bottom-0 left-0 w-full p-4">
-					<div className="flex gap-2">
-						<button
-							onClick={Prev}
-							className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-						>
-							Back
-						</button>
-						<button
-							disabled={loading}
-							onClick={handleSubmit}
-							className="btn btn-secondary text-base-100 border-2 border-secondary-accent grow"
-						>
-							{loading ? "Loading..." : "Submit"}
-						</button>
+				<div className="flex fixed bottom-0 left-0 p-4 w-screen bg-slate-500 justify-center">
+					<div className="w-full max-w-screen-xl">
+						<div className="flex gap-2">
+							<button
+								onClick={Prev}
+								className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
+							>
+								Back
+							</button>
+							<button
+								disabled={loading}
+								onClick={handleSubmit}
+								className="btn btn-secondary text-base-100 border-2 border-secondary-accent grow"
+							>
+								{loading ? "Loading..." : "Submit"}
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

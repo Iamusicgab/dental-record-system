@@ -1,10 +1,9 @@
-import { useState, useContext } from "react";
 import { useNewContext } from "../Hooks/NewUserContext";
+import { BackNext } from "../components/BackNext";
 import { Header } from "../components/Header";
 
 export default function PersonalInfo() {
-	const { data, setData, Next } = useNewContext();
-	const [user, setUser] = useState({});
+	const { data, setData, Next, page } = useNewContext();
 	const handleChange = (e: any) => {
 		setData({ ...data, [e.target.name]: e.target.value });
 	};
@@ -63,14 +62,7 @@ export default function PersonalInfo() {
 					value={data.address || ""}
 					onChange={handleChange}
 				/>
-				<div className="flex gap-2">
-					<button
-						type="submit"
-						className="btn btn-primary text-base-100 border-2 border-primary-accent grow"
-					>
-						Next
-					</button>
-				</div>
+				<BackNext Next={null} Page={page} />
 			</form>
 		</div>
 	);
