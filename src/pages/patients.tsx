@@ -4,15 +4,8 @@ import { getExistingPatients } from "../Hooks/userContext";
 import { Link } from "react-router-dom";
 function Patients() {
 	const [loading, setLoading] = useState(true);
-	const [patients, setPatients] = useState<Array<Patient>>([]);
+	const [patients, setPatients] = useState<any>([]);
 	const [query, setQuery] = useState("");
-	interface Patient {
-		id: string;
-		name: string;
-		dob: string;
-		address: string;
-		procedures: Array<{ procedure: string; date: string }>;
-	}
 	const getPatients = async () => {
 		const data = await getExistingPatients();
 		setPatients(data);
@@ -52,10 +45,10 @@ function Patients() {
 					<div>No Patients yet</div>
 				) : (
 					patients
-						.filter((patient) =>
+						.filter((patient: any) =>
 							patient.name.toLowerCase().includes(query.toLowerCase())
 						)
-						.map((patient, index) => {
+						.map((patient: any, index: any) => {
 							return (
 								<Link key={index} to={`/patients/${patient.id}`}>
 									<div className="transition bg-primary hover:bg-primary-accent active:scale-[97%] px-4 py-5 border-2 border-primary-accent rounded-2xl">
